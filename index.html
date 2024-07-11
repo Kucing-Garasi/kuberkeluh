@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Text</title>
+</head>
+
+<body>
+    <h1>Speech to Text Example</h1>
+    <button id="start-btn">Mulai Pengakuan Suara</button>
+    <p id="output"></p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const startBtn = document.getElementById('start-btn');
+            const output = document.getElementById('output');
+
+            // Check if the browser supports the Web Speech API
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert('Browser Anda tidak mendukung Web Speech API.');
+            } else {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const recognition = new SpeechRecognition();
+
+                recognition.lang = 'id-ID'; // Set the language to Bahasa Indonesia
+                recognition.continuous = false; // Stop after a single phrase
+                recognition.interimResults = false; // No partial results
+
+                recognition.onstart = function () {
+                    output.textContent = 'Mendengarkan...';
+                };
+
+                recognition.onspeechend = function () {
+                    recognition.stop();
+                };
+
+                recognition.onresult = function (event) {
+                    const transcript = event.results[0][0].transcript;
+                    output.textContent = 'Anda berkata: ' + transcript;
+                };
+
+                recognition.onerror = function (event) {
+                    output.textContent = 'Terjadi kesalahan: ' + event.error;
+                };
+
+                startBtn.addEventListener('click', () => {
+                    recognition.start();
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
