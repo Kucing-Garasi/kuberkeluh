@@ -10,11 +10,13 @@
 <body>
     <h1>Speech to Text Example</h1>
     <button id="start-btn">Mulai Pengakuan Suara</button>
+    <button id="stop-btn" disabled>Berhenti Pengakuan Suara</button>
     <p id="output"></p>
 
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const startBtn = document.getElementById('start-btn');
+            const stopBtn = document.getElementById('stop-btn');
             const output = document.getElementById('output');
 
             // Check if the browser supports the Web Speech API
@@ -25,20 +27,31 @@
                 const recognition = new SpeechRecognition();
 
                 recognition.lang = 'id-ID'; // Set the language to Bahasa Indonesia
-                recognition.continuous = false; // Stop after a single phrase
-                recognition.interimResults = false; // No partial results
+                recognition.continuous = true; // Continue recognizing even when the user pauses
+                recognition.interimResults = true; // Show interim results
 
                 recognition.onstart = function () {
                     output.textContent = 'Mendengarkan...';
                 };
 
                 recognition.onspeechend = function () {
-                    recognition.stop();
+                    // Do not stop the recognition on speech end
                 };
 
                 recognition.onresult = function (event) {
-                    const transcript = event.results[0][0].transcript;
-                    output.textContent = 'Anda berkata: ' + transcript;
+                    let interimTranscript = '';
+                    let finalTranscript = '';
+
+                    for (let i = 0; i < event.results.length; i++) {
+                        const transcript = event.results[i][0].transcript;
+                        if (event.results[i].isFinal) {
+                            finalTranscript += transcript + ' ';
+                        } else {
+                            interimTranscript += transcript;
+                        }
+                    }
+
+                    output.innerHTML = 'Anda berkata: <strong>' + finalTranscript + '</strong><br><em>' + interimTranscript + '</em>';
                 };
 
                 recognition.onerror = function (event) {
@@ -47,6 +60,14 @@
 
                 startBtn.addEventListener('click', () => {
                     recognition.start();
+                    startBtn.disabled = true;
+                    stopBtn.disabled = false;
+                });
+
+                stopBtn.addEventListener('click', () => {
+                    recognition.stop();
+                    startBtn.disabled = false;
+                    stopBtn.disabled = true;
                 });
             }
         });
