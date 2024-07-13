@@ -23,6 +23,3 @@ const messages = {
     }
     // Tambahkan bahasa lain dan pesan yang sesuai
 };
-
-// Export the messages object
-export default messages;

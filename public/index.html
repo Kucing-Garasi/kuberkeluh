@@ -19,37 +19,13 @@
     </select>
     <p id="output"></p>
 
+    <script src="messages.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const startBtn = document.getElementById('start-btn');
             const stopBtn = document.getElementById('stop-btn');
             const output = document.getElementById('output');
             const languageSelect = document.getElementById('language-select');
-
-            const messages = {
-                'id-ID': {
-                    listening: 'Mendengarkan...',
-                    youSaid: 'Anda berkata:',
-                    error: 'Terjadi kesalahan:',
-                    startBtn: 'Mulai Pengakuan Suara',
-                    stopBtn: 'Berhenti Pengakuan Suara'
-                },
-                'en-US': {
-                    listening: 'Listening...',
-                    youSaid: 'You said:',
-                    error: 'An error occurred:',
-                    startBtn: 'Start Speech Recognition',
-                    stopBtn: 'Stop Speech Recognition'
-                },
-                'ja-JP': {
-                    listening: '聞いています...',
-                    youSaid: 'あなたは言いました:',
-                    error: 'エラーが発生しました:',
-                    startBtn: '音声認識を開始',
-                    stopBtn: '音声認識を停止'
-                }
-                // Tambahkan bahasa lain dan pesan yang sesuai
-            };
 
             function updateButtonLabels(language) {
                 startBtn.textContent = messages[language].startBtn;
