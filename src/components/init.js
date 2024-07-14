@@ -1,3 +1,7 @@
+import { initializeRecognition } from './recognition'; // Adjust path as needed
+import { setupEventListeners } from './eventListeners'; // Adjust path as needed
+import { updateButtonLabels } from './ui'; // Adjust path as needed
+
 document.addEventListener('DOMContentLoaded', init);
 
 function init() {

@@ -1,4 +1,4 @@
-async function saveTranscript(text, language) {
+export async function saveTranscript(text, language) {
     const response = await fetch('/transcripts', {
         method: 'POST',
         headers: {

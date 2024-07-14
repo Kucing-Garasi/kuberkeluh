@@ -1,18 +1,22 @@
+import { saveTranscript } from './api'; // Adjust path as needed
+import messages from './messages'; // Import messages for UI updates
+import { updateButtonLabels } from './ui'; // Import updateButtonLabels for button text updates
+
 function setupEventListeners(recognition, startBtn, stopBtn, output, languageSelect) {
     recognition.onstart = () => {
         output.textContent = messages[recognition.lang].listening;
     };
-
-    recognition.onspeechend = () => {
-        // Do not stop the recognition on speech end
-    };
-
+    
     recognition.onresult = (event) => {
         handleRecognitionResult(event, recognition.lang, output);
     };
-
+    
     recognition.onerror = (event) => {
         output.textContent = messages[recognition.lang].error + ' ' + event.error;
+    };
+    
+    recognition.onspeechend = () => {
+        // Optional: Handle what happens when speech ends, if desired
     };
 
     startBtn.addEventListener('click', () => {
@@ -29,8 +33,8 @@ function setupEventListeners(recognition, startBtn, stopBtn, output, languageSel
 }
 
 function handleStartClick(recognition, language, startBtn, stopBtn, output) {
-    recognition.lang = language;
-    recognition.start();
+    recognition.lang = language; // Set the language
+    recognition.start(); // Start recognition
 
     startBtn.disabled = true;
     startBtn.classList.add('bg-gray-300');
@@ -40,7 +44,7 @@ function handleStartClick(recognition, language, startBtn, stopBtn, output) {
     stopBtn.classList.remove('bg-gray-300');
     stopBtn.classList.add('bg-red-500');
 
-    output.textContent = messages[language].listening;
+    output.textContent = messages[language].listening; // Show listening message
 }
 
 function handleStopClick(recognition, startBtn, stopBtn) {
@@ -49,6 +53,7 @@ function handleStopClick(recognition, startBtn, stopBtn) {
     startBtn.disabled = false;
     startBtn.classList.remove('bg-gray-300');
     startBtn.classList.add('bg-blue-500');
+    
     stopBtn.disabled = true;
     stopBtn.classList.add('bg-gray-300');
     stopBtn.classList.remove('bg-red-500');
@@ -57,5 +62,16 @@ function handleStopClick(recognition, startBtn, stopBtn) {
 function handleLanguageChange(recognition, languageSelect, startBtn, stopBtn, output) {
     recognition.lang = languageSelect.value;
     updateButtonLabels(languageSelect.value, startBtn, stopBtn);
-    output.textContent = '';
+    output.textContent = ''; // Clear the output when language changes
 }
+
+function handleRecognitionResult(event, language, output) {
+    const transcript = Array.from(event.results)
+        .map(result => result[0].transcript)
+        .join(' ');
+
+    output.textContent = messages[language].youSaid + ' ' + transcript;
+}
+
+// Exporting all functions
+export { setupEventListeners, handleStartClick, handleStopClick, handleLanguageChange, handleRecognitionResult };

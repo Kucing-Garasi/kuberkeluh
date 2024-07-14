@@ -8,7 +8,7 @@ const cors = require('cors');
 require('dotenv').config();  // Load environment variables from .env file
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;  // Use environment variable for port
 
 // Middleware
 app.use(bodyParser.json());
@@ -19,10 +19,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 const mongoURI = process.env.MONGODB_URI;
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
+  useUnifiedTopology: true,  // Added for better connection management
 });
 
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
   console.log('Connected to MongoDB');
 });
@@ -44,18 +45,13 @@ app.post('/transcripts', async (req, res) => {
     await newTranscript.save();
     res.status(201).send(newTranscript);
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send({ error: 'Error saving transcript', details: err });
   }
 });
 
 // Serve static files
 app.get('*', (req, res) => {
-  let filePath = '.' + req.url;
-  if (filePath === './') {
-    filePath = './public/index.html'; // Default to serving index.html
-  } else {
-    filePath = path.join(__dirname, 'public', req.url);
-  }
+  let filePath = path.join(__dirname, 'public', req.url === '/' ? 'index.html' : req.url);
 
   const extname = path.extname(filePath);
   let contentType = 'text/html';
@@ -87,7 +83,7 @@ app.get('*', (req, res) => {
         res.end('404 Not Found');
       } else {
         res.writeHead(500);
-        res.end('Internal Server Error: ' + err.code);
+        res.end('Internal Server Error: ' + err.message);
       }
     } else {
       res.writeHead(200, { 'Content-Type': contentType });

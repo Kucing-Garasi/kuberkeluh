@@ -1,3 +1,6 @@
+import messages from './messages.js'; // Import the messages object
+import { saveTranscript } from './api.js'; // Import the saveTranscript function
+
 function initializeRecognition(language) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
@@ -24,7 +27,7 @@ async function handleRecognitionResult(event, lang, output) {
 
     output.innerHTML = messages[lang].youSaid + ' <strong>' + finalTranscript + '</strong><br><em>' + interimTranscript + '</em>';
 
-    // Save the final transcript to the server
+    // Save the final transcript to the server when the stop button is clicked
     if (finalTranscript.trim().length > 0) {
         try {
             const savedTranscript = await saveTranscript(finalTranscript.trim(), lang);
@@ -34,3 +37,5 @@ async function handleRecognitionResult(event, lang, output) {
         }
     }
 }
+
+export { initializeRecognition, handleRecognitionResult }; // Export the functions
