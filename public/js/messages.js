@@ -4,8 +4,8 @@ const messages = {
         listening: 'Mendengarkan...',
         youSaid: 'Anda berkata:',
         error: 'Terjadi kesalahan:',
-        startBtn: 'Mulai Pengakuan Suara',
-        stopBtn: 'Berhenti Pengakuan Suara'
+        startBtn: 'Mulai Merekam Suara',
+        stopBtn: 'Berhenti Merekam Suara'
     },
     'en-US': {
         listening: 'Listening...',

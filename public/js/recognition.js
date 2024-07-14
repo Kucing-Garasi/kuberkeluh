@@ -9,7 +9,7 @@ function initializeRecognition(language) {
     return recognition;
 }
 
-function handleRecognitionResult(event, lang, output) {
+async function handleRecognitionResult(event, lang, output) {
     let interimTranscript = '';
     let finalTranscript = '';
 
@@ -23,5 +23,14 @@ function handleRecognitionResult(event, lang, output) {
     }
 
     output.innerHTML = messages[lang].youSaid + ' <strong>' + finalTranscript + '</strong><br><em>' + interimTranscript + '</em>';
-}
 
+    // Save the final transcript to the server
+    if (finalTranscript.trim().length > 0) {
+        try {
+            const savedTranscript = await saveTranscript(finalTranscript.trim(), lang);
+            console.log('Saved transcript:', savedTranscript);
+        } catch (error) {
+            console.error('Error saving transcript:', error);
+        }
+    }
+}
