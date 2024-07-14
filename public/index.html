@@ -31,94 +31,12 @@
         <p id="output" class="mt-4"></p>
     </div>
 
-    <script src="messages.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const startBtn = document.getElementById('start-btn');
-            const stopBtn = document.getElementById('stop-btn');
-            const output = document.getElementById('output');
-            const languageSelect = document.getElementById('language-select');
-
-            function updateButtonLabels(language) {
-                startBtn.textContent = messages[language].startBtn;
-                stopBtn.textContent = messages[language].stopBtn;
-            }
-
-            // Check if the browser supports the Web Speech API
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert('Browser Anda tidak mendukung Web Speech API.');
-            } else {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                const recognition = new SpeechRecognition();
-
-                recognition.lang = languageSelect.value; // Set the default language based on the selection
-                recognition.continuous = true; // Continue recognizing even when the user pauses
-                recognition.interimResults = true; // Show interim results
-
-                recognition.onstart = function () {
-                    output.textContent = messages[recognition.lang].listening;
-                };
-
-                recognition.onspeechend = function () {
-                    // Do not stop the recognition on speech end
-                };
-
-                recognition.onresult = function (event) {
-                    let interimTranscript = '';
-                    let finalTranscript = '';
-
-                    for (let i = 0; i < event.results.length; i++) {
-                        const transcript = event.results[i][0].transcript;
-                        if (event.results[i].isFinal) {
-                            finalTranscript += transcript + ' ';
-                        } else {
-                            interimTranscript += transcript;
-                        }
-                    }
-
-                    output.innerHTML = messages[recognition.lang].youSaid + ' <strong>' + finalTranscript + '</strong><br><em>' + interimTranscript + '</em>';
-                };
-
-                recognition.onerror = function (event) {
-                    output.textContent = messages[recognition.lang].error + ' ' + event.error;
-                };
-
-                startBtn.addEventListener('click', () => {
-                    recognition.lang = languageSelect.value; // Update the language based on the selection
-                    recognition.start();
-
-                    startBtn.disabled = true;
-                    startBtn.classList.add('bg-gray-300');
-                    startBtn.classList.remove('bg-blue-500');
-
-                    stopBtn.disabled = false;
-                    stopBtn.classList.remove('bg-gray-300');
-                    stopBtn.classList.add('bg-red-500');
-
-                    output.textContent = messages[recognition.lang].listening; // Show listening text on start
-                });
-
-                stopBtn.addEventListener('click', () => {
-                    recognition.stop();
-                    startBtn.disabled = false;
-                    startBtn.classList.remove('bg-gray-300');
-                    startBtn.classList.add('bg-blue-500');
-                    stopBtn.disabled = true;
-                    stopBtn.classList.add('bg-gray-300');
-                    stopBtn.classList.remove('bg-red-500');
-                });
-
-                languageSelect.addEventListener('change', () => {
-                    recognition.lang = languageSelect.value; // Update the language based on the selection
-                    updateButtonLabels(languageSelect.value); // Update the button labels
-                    output.textContent = ''; // Reset the output text when the language changes
-                });
-
-                // Set the initial button labels based on the default language
-                updateButtonLabels(languageSelect.value);
-            }
-        });
-    </script>
+    <script src="js/messages.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/recognition.js"></script>
+    <script src="js/eventListeners.js"></script>
+    <script src="js/init.js"></script>
+    
 </body>
 
 </html>
