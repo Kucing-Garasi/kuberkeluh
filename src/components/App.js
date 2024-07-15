@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import LanguageSelect from './LanguageSelect';
-import StartStopButtons from './StartStopButtons';
-import Output from './Output';
+import LanguageSelect from '../js/LanguageSelect';
+import StartStopButtons from '../js/StartStopButtons';
+import Output from '../js/Output';
 
 const App = () => {
     const [language, setLanguage] = useState('id-ID');
