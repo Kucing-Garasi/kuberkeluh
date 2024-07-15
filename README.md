@@ -1,10 +1,24 @@
-# kuberkeluh
+# Kuberkeluh
 
-## Feedback collection website
-- speech to text
-- AI summarizer
-- report generation
-- action suggestion based on summary
+Kuberkeluh is an innovative platform designed to streamline feedback collection and analysis through advanced speech-to-text technology and AI-powered summarization.
+
+## Our Mission
+
+Our mission is to empower organizations to understand their users better, generate insightful reports, and take proactive actions based on comprehensive feedback summaries.
+
+## Key Features
+
+- **Speech-to-Text Conversion**
+- **AI-Powered Summarization**
+- **Detailed Report Generation**
+- **Actionable Suggestions**
+
+## How It Works
+
+1. **Collect Feedback**
+2. **Convert & Summarize**
+3. **Generate Reports**
+4. **Take Action**
 
 ## Git Commit Messages
 Format: ```<type>: <subject>```
