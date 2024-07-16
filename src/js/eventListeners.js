@@ -33,9 +33,11 @@ function setupEventListeners(recognition, startBtn, stopBtn, output, languageSel
 }
 
 function handleStartClick(recognition, language, startBtn, stopBtn, output) {
+    console.log("start btn telah diklik")
     recognition.lang = language; // Set the language
     recognition.start(); // Start recognition
 
+    console.log("Mencoba switch tombol")
     startBtn.disabled = true;
     startBtn.classList.add('bg-gray-300');
     startBtn.classList.remove('bg-blue-500');

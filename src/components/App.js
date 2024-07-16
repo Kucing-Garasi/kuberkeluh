@@ -60,9 +60,6 @@ const App = () => {
 
             <LanguageSelect language={language} onChange={handleLanguageChange} />
             <StartStopButtons setFinalTranscript={setFinalTranscript} language={language} />
-            <div id="output" className="output-area">
-                {output} {/* Display the output here */}
-            </div>
         </div>
     );
 };
