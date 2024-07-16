@@ -12,7 +12,16 @@ const port = process.env.PORT || 3000;  // Use environment variable for port
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());
+
+// Options need to be reviewed for production
+const corsOptions = {
+  origin: '*', // Allow all origins
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allow specific methods
+  allowedHeaders: 'Content-Type,Authorization', // Allow specific headers
+  optionsSuccessStatus: 204 // Some legacy browsers choke on 204
+};
+app.use(cors(corsOptions));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // MongoDB connection
@@ -36,6 +45,15 @@ const transcriptSchema = new mongoose.Schema({
 });
 
 const Transcript = mongoose.model('Transcript', transcriptSchema);
+
+app.get('/transcripts', async (req, res) => {
+  try {
+    const transcripts = await Transcript.find({});
+    res.status(200).json(transcripts);
+  } catch (err) {
+    res.status(500).send({ error: 'Error retrieving transcripts', details: err });
+  }
+})
 
 // API endpoint to save transcript
 app.post('/transcripts', async (req, res) => {

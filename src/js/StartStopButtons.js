@@ -3,9 +3,11 @@ import messages from './messages'; // Import messages
 import { initializeRecognition } from './recognition'; // Adjust path as needed
 import { setupEventListeners } from './eventListeners'; // Adjust path as needed
 import Output from './Output';
+import { getTranscript, saveTranscript } from './api';
 
 const StartStopButtons = ({ setFinalTranscript, language }) => {
     const [recognition, setRecognition] = useState(null);
+    const [transcript, setTranscript] = useState(null);
 
     useEffect(() => {
         const rec = initializeRecognition(language);
@@ -16,33 +18,41 @@ const StartStopButtons = ({ setFinalTranscript, language }) => {
             document.getElementById('start-btn'),
             document.getElementById('stop-btn'),
             document.getElementById('output'),
-            document.getElementById('language-select')
+            document.getElementById('language-select'),
+            setTranscript,
         );
     }, [])
 
-    const handleStart = () => {
-        console.log('Start button clicked');
-    };
+    const handleSaveRecord = async () => {       
+        const resp = await saveTranscript(transcript, language);
+        console.log("Save Success !!!", resp)
+    }
 
-    const handleStop = async () => {
-        if (recognition) {
-            console.log('Stop button clicked');
-            recognition.stop();
-            // Handle final transcript saving logic here
-        }
-    };
+    const handleGetRecord = async () => {
+        const resp = await getTranscript();
+        console.log("Get Success !!!", resp)
+        document.getElementById('transcript').innerHTML = JSON.stringify(resp, null, 2);
+    }
 
     return (
         <>
             <div className="flex justify-between">
-                <button id="start-btn" className="mx-2 py-2 px-6 bg-blue-500 text-white font-bold rounded" onClick={handleStart}>
+                <button id="start-btn" className="mx-2 py-2 px-6 bg-blue-500 text-white font-bold rounded">
                     {messages[language].startBtn}
                 </button>
-                <button id="stop-btn" className="mx-2 py-2 px-6 bg-gray-300 text-white font-bold rounded" onClick={handleStop}>
+                <button id="stop-btn" className="mx-2 py-2 px-6 bg-gray-300 text-white font-bold rounded">
                     {messages[language].stopBtn}
+                </button>
+                <button id="stop-btn" className="mx-2 py-2 px-6 bg-green-800 text-white font-bold rounded" onClick={handleSaveRecord}>
+                    Save Record
+                </button>
+                <button id="stop-btn" className="mx-2 py-2 px-6 bg-pink-800 text-white font-bold rounded" onClick={handleGetRecord}>
+                    Get Record
                 </button>
             </div>
             <Output output={""} />
+
+            <pre id='transcript'></pre>
         </>
     );
 };
