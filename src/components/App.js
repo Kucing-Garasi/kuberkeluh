@@ -4,6 +4,7 @@ import StartStopButtons from '../js/StartStopButtons';
 import GeminiAI from '../js/gemini';
 import LoadingSpinner from '../js/LoadingSpinner';
 import formatGeminiText from '../js/geminiTextFormatter';
+import messages from '../js/messages';
 
 const App = () => {
     const [language, setLanguage] = useState('id-ID');
@@ -16,7 +17,7 @@ const App = () => {
 
     async function testAI() {
         setLoading(true);
-        const prompt = "Berikan solusi untuk keluhan berikut: " + transcript.current;
+        const prompt = messages[language].prompt + transcript.current;
 
         const result = await GeminiAI.generateContent(prompt);
         const response = await result.response;

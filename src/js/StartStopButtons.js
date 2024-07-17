@@ -23,7 +23,7 @@ const StartStopButtons = ({ transcript, setTranscript, language }) => {
     }, [])
 
     const handleSaveRecord = async () => {
-        const resp = await saveTranscript(transcript, language);
+        const resp = await saveTranscript(transcript.current, language);
         console.log("Save Success !!!", resp)
     }
 
