@@ -5,9 +5,8 @@ import { setupEventListeners } from './eventListeners'; // Adjust path as needed
 import Output from './Output';
 import { getTranscript, saveTranscript } from './api';
 
-const StartStopButtons = ({ setFinalTranscript, language }) => {
+const StartStopButtons = ({ transcript, setTranscript, language }) => {
     const [recognition, setRecognition] = useState(null);
-    const [transcript, setTranscript] = useState(null);
 
     useEffect(() => {
         const rec = initializeRecognition(language);
@@ -23,7 +22,7 @@ const StartStopButtons = ({ setFinalTranscript, language }) => {
         );
     }, [])
 
-    const handleSaveRecord = async () => {       
+    const handleSaveRecord = async () => {
         const resp = await saveTranscript(transcript, language);
         console.log("Save Success !!!", resp)
     }
@@ -50,7 +49,9 @@ const StartStopButtons = ({ setFinalTranscript, language }) => {
                     Get Record
                 </button>
             </div>
-            <Output output={""} />
+            <div className='w-1/2 my-4'>
+                <Output output={""} />
+            </div>
 
             <pre id='transcript'></pre>
         </>

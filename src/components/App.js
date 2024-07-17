@@ -1,12 +1,30 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import LanguageSelect from '../js/LanguageSelect';
 import StartStopButtons from '../js/StartStopButtons';
-import Output from '../js/Output';
+import GeminiAI from '../js/gemini';
+import LoadingSpinner from '../js/LoadingSpinner';
+import formatGeminiText from '../js/geminiTextFormatter';
 
 const App = () => {
     const [language, setLanguage] = useState('id-ID');
-    const [output, setOutput] = useState('');
-    const [finalTranscript, setFinalTranscript] = useState('');
+    const [loading, setLoading] = useState(false);
+    const transcript = useRef(null);
+
+    const setTranscript = (text) => {
+        transcript.current = text;
+    }
+
+    async function testAI() {
+        setLoading(true);
+        const prompt = "Berikan solusi untuk keluhan berikut: " + transcript.current;
+
+        const result = await GeminiAI.generateContent(prompt);
+        const response = await result.response;
+        const output = formatGeminiText(response.text());
+
+        document.getElementById('ai-output').innerHTML = output;
+        setLoading(false);
+    }
 
     const handleLanguageChange = (event) => {
         setLanguage(event.target.value);
@@ -43,7 +61,6 @@ const App = () => {
                         </div>
                     </div>
 
-
                     <div className="mt-4 flex justify-center">
                         <div className="">
                             <h3 className="text-2xl font-semibold mt-4 mb-2">How It Works</h3>
@@ -59,7 +76,20 @@ const App = () => {
             </div>
 
             <LanguageSelect language={language} onChange={handleLanguageChange} />
-            <StartStopButtons setFinalTranscript={setFinalTranscript} language={language} />
+            <StartStopButtons transcript={transcript} setTranscript={setTranscript} language={language} />
+
+            <div className='text-lg text-pink-700 font-bold'>
+                Kuberkeluh AI - The Most Advanced AI Tool to Solve Your Problem
+                <br /> <sup className='text-xs font-normal'>(*Credit to Gemini AI, dont tell anybody) </sup>
+            </div>
+
+            <button className='mx-2 mt-4 mb-6 py-2 px-6 bg-purple-700 text-white font-bold rounded' onClick={testAI}>
+                Generate Solution
+            </button>
+
+            {loading && <LoadingSpinner />}
+
+            <div id='ai-output' className='w-1/2'></div>
         </div>
     );
 };
