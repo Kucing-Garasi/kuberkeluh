@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import messages from './messages'; // Import messages
 import { initializeRecognition } from './recognition'; // Adjust path as needed
 import { setupEventListeners } from './eventListeners'; // Adjust path as needed
 import Output from './Output';
@@ -15,8 +14,6 @@ const StartStopButtons = ({ transcript, setTranscript, language }) => {
         setupEventListeners(
             rec,
             document.getElementById('toggle-mic'),
-            document.getElementById('start-btn'),
-            document.getElementById('stop-btn'),
             document.getElementById('output'),
             document.getElementById('language-select'),
             setTranscript,
@@ -45,10 +42,10 @@ const StartStopButtons = ({ transcript, setTranscript, language }) => {
                     </svg>
                 </button>
 
-                <button id="stop-btn" className="mx-2 py-2 px-6 bg-green-800 text-white font-bold rounded" onClick={handleSaveRecord}>
+                <button className="mx-2 py-2 px-6 bg-green-800 text-white font-bold rounded" onClick={handleSaveRecord}>
                     Save Record
                 </button>
-                <button id="stop-btn" className="mx-2 py-2 px-6 bg-pink-800 text-white font-bold rounded" onClick={handleGetRecord}>
+                <button className="mx-2 py-2 px-6 bg-pink-800 text-white font-bold rounded" onClick={handleGetRecord}>
                     Get Record
                 </button>
             </div>

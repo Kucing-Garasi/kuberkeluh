@@ -1,6 +1,6 @@
 import messages from './messages'; // Import messages for UI updates
 
-function setupEventListeners(recognition, toggleMic, startBtn, stopBtn, output, languageSelect, setTranscript) {
+function setupEventListeners(recognition, toggleMic, output, languageSelect, setTranscript) {
     recognition.onstart = () => {
         output.textContent = messages[recognition.lang].listening;
     };
@@ -51,7 +51,6 @@ function toggleMicStartStop(recognition, language, toggleMic, output) {
         recognition.stop();
         toggleMic.classList.remove('bg-red-500');
         toggleMic.classList.add('bg-blue-500');
-        output.textContent = ''; // Clear the output or show a stopped message
 
         isRecognizing = false; // Update the flag
     } else {
