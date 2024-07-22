@@ -1,7 +1,7 @@
 import messages from './messages'; // Import messages for UI updates
 import { updateButtonLabels } from './ui'; // Import updateButtonLabels for button text updates
 
-function setupEventListeners(recognition, startBtn, stopBtn, output, languageSelect, setTranscript) {
+function setupEventListeners(recognition, toggleMic, startBtn, stopBtn, output, languageSelect, setTranscript) {
     recognition.onstart = () => {
         output.textContent = messages[recognition.lang].listening;
     };
@@ -18,12 +18,9 @@ function setupEventListeners(recognition, startBtn, stopBtn, output, languageSel
         // Optional: Handle what happens when speech ends, if desired
     };
 
-    startBtn.addEventListener('click', () => {
-        handleStartClick(recognition, languageSelect.value, startBtn, stopBtn, output);
-    });
-
-    stopBtn.addEventListener('click', () => {
-        handleStopClick(recognition, startBtn, stopBtn);
+    toggleMic.addEventListener('click', () => {
+        console.log('toggleMic clicked');
+        toggleMicStartStop(recognition, languageSelect.value, toggleMic, output);
     });
 
     languageSelect.addEventListener('change', () => {
@@ -31,31 +28,26 @@ function setupEventListeners(recognition, startBtn, stopBtn, output, languageSel
     });
 }
 
-function handleStartClick(recognition, language, startBtn, stopBtn, output) {
-    recognition.lang = language; // Set the language
-    recognition.start(); // Start recognition
+let isRecognizing = false; // Add a flag to track recognition state
 
-    startBtn.disabled = true;
-    startBtn.classList.add('bg-gray-300');
-    startBtn.classList.remove('bg-blue-500');
+function toggleMicStartStop(recognition, language, toggleMic, output) {
+    if (isRecognizing) {
+        // Stop recognition if it's already running
+        recognition.stop();
+        toggleMic.classList.remove('bg-red-500');
+        toggleMic.classList.add('bg-blue-500');
 
-    stopBtn.disabled = false;
-    stopBtn.classList.remove('bg-gray-300');
-    stopBtn.classList.add('bg-red-500');
+        isRecognizing = false; // Update the flag
+    } else {
+        // Start recognition if it's not running
+        recognition.lang = language; // Set the language
+        recognition.start(); // Start recognition
+        toggleMic.classList.add('bg-red-500'); // Change the color of the button
+        toggleMic.classList.remove('bg-blue-500');
+        output.textContent = messages[language].listening; // Show listening message
 
-    output.textContent = messages[language].listening; // Show listening message
-}
-
-function handleStopClick(recognition, startBtn, stopBtn) {
-    recognition.stop();
-
-    startBtn.disabled = false;
-    startBtn.classList.remove('bg-gray-300');
-    startBtn.classList.add('bg-blue-500');
-
-    stopBtn.disabled = true;
-    stopBtn.classList.add('bg-gray-300');
-    stopBtn.classList.remove('bg-red-500');
+        isRecognizing = true; // Update the flag
+    }
 }
 
 function handleLanguageChange(recognition, languageSelect, startBtn, stopBtn, output) {
@@ -77,8 +69,6 @@ function handleRecognitionResult(event, language, output, setTranscript) {
 // Exporting all functions
 export {
     setupEventListeners,
-    handleStartClick,
-    handleStopClick,
     handleLanguageChange,
     handleRecognitionResult
 };
