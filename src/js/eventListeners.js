@@ -1,5 +1,4 @@
 import messages from './messages'; // Import messages for UI updates
-import { updateButtonLabels } from './ui'; // Import updateButtonLabels for button text updates
 
 function setupEventListeners(recognition, toggleMic, startBtn, stopBtn, output, languageSelect, setTranscript) {
     recognition.onstart = () => {
@@ -24,8 +23,24 @@ function setupEventListeners(recognition, toggleMic, startBtn, stopBtn, output, 
     });
 
     languageSelect.addEventListener('change', () => {
-        handleLanguageChange(recognition, languageSelect, startBtn, stopBtn, output);
+        handleLanguageChange(recognition, languageSelect, output);
     });
+}
+
+
+function handleLanguageChange(recognition, languageSelect, output) {
+    recognition.lang = languageSelect.value;
+    output.textContent = ''; // Clear the output when language changes
+}
+
+function handleRecognitionResult(event, language, output, setTranscript) {
+    const text = Array.from(event.results)
+        .map(result => result[0].transcript)
+        .join(' ');
+
+    setTranscript(text);
+
+    output.textContent = messages[language].youSaid + ' ' + text;
 }
 
 let isRecognizing = false; // Add a flag to track recognition state
@@ -36,6 +51,7 @@ function toggleMicStartStop(recognition, language, toggleMic, output) {
         recognition.stop();
         toggleMic.classList.remove('bg-red-500');
         toggleMic.classList.add('bg-blue-500');
+        output.textContent = ''; // Clear the output or show a stopped message
 
         isRecognizing = false; // Update the flag
     } else {
@@ -48,22 +64,6 @@ function toggleMicStartStop(recognition, language, toggleMic, output) {
 
         isRecognizing = true; // Update the flag
     }
-}
-
-function handleLanguageChange(recognition, languageSelect, startBtn, stopBtn, output) {
-    recognition.lang = languageSelect.value;
-    updateButtonLabels(languageSelect.value, startBtn, stopBtn);
-    output.textContent = ''; // Clear the output when language changes
-}
-
-function handleRecognitionResult(event, language, output, setTranscript) {
-    const text = Array.from(event.results)
-        .map(result => result[0].transcript)
-        .join(' ');
-
-    setTranscript(text);
-
-    output.textContent = messages[language].youSaid + ' ' + text;
 }
 
 // Exporting all functions
