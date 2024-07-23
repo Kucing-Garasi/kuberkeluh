@@ -2,12 +2,6 @@
 How-to run the app
 
 ```shell
-node server.js
-```
-
-open new terminal 
-
-```shell
 cd docker
 docker compose up
 ```

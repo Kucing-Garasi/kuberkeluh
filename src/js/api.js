@@ -1,7 +1,7 @@
 export async function saveTranscript(text, language) {
     const json = JSON.stringify({ text, language });
     // TODO: change the URI to be loaded from env OR just adjust it to the correct one for dev
-    const response = await fetch('https://didactic-space-goggles-65rgxwr94vxc4w67-3001.app.github.dev/transcripts', {
+    const response = await fetch('http://localhost:3001/transcripts', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -18,7 +18,7 @@ export async function saveTranscript(text, language) {
 
 export async function getTranscript() {
     // TODO: change the URI to be loaded from env OR just adjust it to the correct one for dev
-    const response = await fetch('https://didactic-space-goggles-65rgxwr94vxc4w67-3001.app.github.dev/transcripts', {
+    const response = await fetch('http://localhost:3001/transcripts', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
