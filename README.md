@@ -1,3 +1,17 @@
+
+How-to run the app
+
+```shell
+node server.js
+```
+
+open new terminal 
+
+```shell
+cd docker
+docker compose up
+```
+
 # Kuberkeluh
 
 Kuberkeluh is an innovative platform designed to streamline feedback collection and analysis through advanced speech-to-text technology and AI-powered summarization.
