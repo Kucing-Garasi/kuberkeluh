@@ -17,13 +17,23 @@ services:
       - mongodb_data_container:/data/db
     
   web:
-    build: ../.
+    build:
+      context: ..
+      dockerfile: web.dockerfile
     ports:
       - 3000:3000
-      - 3001:3001
     depends_on:
       - mongodb_container
-    environment:
-      MONGODB_URI: mongodb://root:admin123@mongodb_container:27017/kuberkeluh
-      PORT: 3001
+
+  # server:
+  #   build:
+  #     context: ..
+  #     dockerfile: server.dockerfile
+  #   ports:
+  #     - 3001:3001
+  #   depends_on:
+  #     - mongodb_container
+  #   environment:
+  #     MONGODB_URI: mongodb://root:admin123@mongodb_container:27017/kuberkeluh
+  #     PORT: 3001
 
