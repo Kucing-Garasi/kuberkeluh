@@ -25,15 +25,15 @@ services:
     depends_on:
       - mongodb_container
 
-  # server:
-  #   build:
-  #     context: ..
-  #     dockerfile: server.dockerfile
-  #   ports:
-  #     - 3001:3001
-  #   depends_on:
-  #     - mongodb_container
-  #   environment:
-  #     MONGODB_URI: mongodb://root:admin123@mongodb_container:27017/kuberkeluh
-  #     PORT: 3001
+  server:
+    build:
+      context: ..
+      dockerfile: server.dockerfile
+    ports:
+      - 3001:3001
+    depends_on:
+      - mongodb_container
+    environment:
+      MONGODB_URI: mongodb://root:admin123@mongodb_container:27017/kuberkeluh
+      PORT: 3001
 
